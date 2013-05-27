@@ -37,7 +37,7 @@
          "requires" : {
             "File::Find" : "0",
             "File::Temp" : "0",
-            "Test::More" : "0"
+            "Test::More" : "0.89"
          }
       }
    },
@@ -53,6 +53,6 @@
          "web" : "https://github.com/Leont/experimental"
       }
    },
-   "version" : "0.001"
+   "version" : "0.002"
 }
 

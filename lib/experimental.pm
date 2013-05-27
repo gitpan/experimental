@@ -1,6 +1,6 @@
 package experimental;
 {
-  $experimental::VERSION = '0.001';
+  $experimental::VERSION = '0.002';
 }
 use strict;
 use warnings;
@@ -24,7 +24,7 @@ sub import {
 		elsif ($features{$pragma}) {
 			feature->import($pragma);
 		}
-		if ($grandfathered{$pragma} and $grandfathered{$pragma} > $]) {
+		elsif ($grandfathered{$pragma} and $grandfathered{$pragma} > $]) {
 			croak "Need perl $] for feature $pragma";
 		}
 		else {
@@ -66,7 +66,7 @@ experimental - Experimental features made easy
 
 =head1 VERSION
 
-version 0.001
+version 0.002
 
 =head1 DESCRIPTION
 
