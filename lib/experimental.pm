@@ -1,6 +1,6 @@
 package experimental;
 {
-  $experimental::VERSION = '0.002';
+  $experimental::VERSION = '0.003';
 }
 use strict;
 use warnings;
@@ -24,8 +24,8 @@ sub import {
 		elsif ($features{$pragma}) {
 			feature->import($pragma);
 		}
-		elsif ($grandfathered{$pragma} and $grandfathered{$pragma} > $]) {
-			croak "Need perl $] for feature $pragma";
+		elsif ($grandfathered{$pragma}) {
+			croak "Need perl $grandfathered{$pragma} for feature $pragma" if $grandfathered{$pragma} > $];
 		}
 		else {
 			croak "Can't enable unknown feature $pragma";
@@ -56,8 +56,8 @@ sub unimport {
 
 #ABSTRACT: Experimental features made easy
 
-__END__
 
+__END__
 =pod
 
 =head1 NAME
@@ -66,7 +66,7 @@ experimental - Experimental features made easy
 
 =head1 VERSION
 
-version 0.002
+version 0.003
 
 =head1 DESCRIPTION
 
@@ -114,3 +114,4 @@ This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
 
 =cut
+
