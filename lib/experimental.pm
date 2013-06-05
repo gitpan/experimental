@@ -1,17 +1,16 @@
 package experimental;
 {
-  $experimental::VERSION = '0.003';
+  $experimental::VERSION = '0.004';
 }
 use strict;
 use warnings;
-eval { require feature };
 
 use Carp qw/croak carp/;
 
 my %warnings = map { $_ => 1 } grep { /^experimental::/ } keys %warnings::Offsets;
-my %features = map { $_ => 1 } do { no warnings 'once'; keys %feature::feature; };
+my %features = map { $_ => 1 } eval { require feature } && keys %feature::feature;
 
-my %grandfathered = ( smartmatch => 5.010001, array_base => 5);
+my %grandfathered = (smartmatch => 5.010001, array_base => 5);
 
 sub import {
 	my ($self, @pragmas) = @_;
@@ -24,11 +23,11 @@ sub import {
 		elsif ($features{$pragma}) {
 			feature->import($pragma);
 		}
-		elsif ($grandfathered{$pragma}) {
-			croak "Need perl $grandfathered{$pragma} for feature $pragma" if $grandfathered{$pragma} > $];
-		}
-		else {
+		elsif (not $grandfathered{$pragma}) {
 			croak "Can't enable unknown feature $pragma";
+		}
+		elsif ($grandfathered{$pragma} > $]) {
+			croak "Need perl $grandfathered{$pragma} for feature $pragma";
 		}
 	}
 	return;
@@ -56,8 +55,8 @@ sub unimport {
 
 #ABSTRACT: Experimental features made easy
 
-
 __END__
+
 =pod
 
 =head1 NAME
@@ -66,7 +65,7 @@ experimental - Experimental features made easy
 
 =head1 VERSION
 
-version 0.003
+version 0.004
 
 =head1 DESCRIPTION
 
@@ -114,4 +113,3 @@ This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
 
 =cut
-
