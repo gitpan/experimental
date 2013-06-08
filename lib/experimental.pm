@@ -1,6 +1,6 @@
 package experimental;
 {
-  $experimental::VERSION = '0.004';
+  $experimental::VERSION = '0.005';
 }
 use strict;
 use warnings;
@@ -10,7 +10,7 @@ use Carp qw/croak carp/;
 my %warnings = map { $_ => 1 } grep { /^experimental::/ } keys %warnings::Offsets;
 my %features = map { $_ => 1 } eval { require feature } && keys %feature::feature;
 
-my %grandfathered = (smartmatch => 5.010001, array_base => 5);
+my %grandfathered = (smartmatch => 5.010001, lexical_topic => 5.010000, array_base => 5);
 
 sub import {
 	my ($self, @pragmas) = @_;
@@ -65,7 +65,7 @@ experimental - Experimental features made easy
 
 =head1 VERSION
 
-version 0.004
+version 0.005
 
 =head1 DESCRIPTION
 
