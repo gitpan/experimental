@@ -1,52 +1,75 @@
 package experimental;
-{
-  $experimental::VERSION = '0.005';
-}
+$experimental::VERSION = '0.006';
 use strict;
 use warnings;
 
+use feature ();
 use Carp qw/croak carp/;
 
 my %warnings = map { $_ => 1 } grep { /^experimental::/ } keys %warnings::Offsets;
-my %features = map { $_ => 1 } eval { require feature } && keys %feature::feature;
+my %features = map { $_ => 1 } keys %feature::feature;
 
-my %grandfathered = (smartmatch => 5.010001, lexical_topic => 5.010000, array_base => 5);
+my %grandfathered = (
+	autoderef     => 5.014000,
+	smartmatch    => 5.010001,
+	lexical_topic => 5.010000,
+	array_base    => 5,
+);
+
+my %additional = (
+	postderef  => ['postderef_qq'],
+	switch     => ['smartmatch'],
+);
+
+sub _enable {
+	my $pragma = shift;
+	if ($warnings{"experimental::$pragma"}) {
+		warnings->unimport("experimental::$pragma");
+		feature->import($pragma) if exists $features{$pragma};
+		_enable(@{ $additional{$pragma} }) if $additional{$pragma};
+	}
+	elsif ($features{$pragma}) {
+		feature->import($pragma);
+		_enable(@{ $additional{$pragma} }) if $additional{$pragma};
+	}
+	elsif (not $grandfathered{$pragma}) {
+		croak "Can't enable unknown feature $pragma";
+	}
+	elsif ($grandfathered{$pragma} > $]) {
+		croak "Need perl $grandfathered{$pragma} for feature $pragma";
+	}
+}
 
 sub import {
 	my ($self, @pragmas) = @_;
 
 	for my $pragma (@pragmas) {
-		if ($warnings{"experimental::$pragma"}) {
-			warnings->unimport("experimental::$pragma");
-			feature->import($pragma) if $features{$pragma};
-		}
-		elsif ($features{$pragma}) {
-			feature->import($pragma);
-		}
-		elsif (not $grandfathered{$pragma}) {
-			croak "Can't enable unknown feature $pragma";
-		}
-		elsif ($grandfathered{$pragma} > $]) {
-			croak "Need perl $grandfathered{$pragma} for feature $pragma";
-		}
+		_enable($pragma);
 	}
 	return;
+}
+
+sub _disable {
+	my $pragma = shift;
+	if ($warnings{"experimental::$pragma"}) {
+		warnings->import("experimental::$pragma");
+		feature->unimport($pragma) if exists $features{$pragma};
+		_disable(@{ $additional{$pragma} }) if $additional{$pragma};
+	}
+	elsif ($features{$pragma}) {
+		feature->unimport($pragma);
+		_disable(@{ $additional{$pragma} }) if $additional{$pragma};
+	}
+	elsif (not $grandfathered{$pragma}) {
+		carp "Can't disable unknown feature $pragma, ignoring";
+	}
 }
 
 sub unimport {
 	my ($self, @pragmas) = @_;
 
 	for my $pragma (@pragmas) {
-		if ($warnings{"experimental::$pragma"}) {
-			warnings->import("experimental::$pragma");
-			feature->unimport($pragma) if $features{$pragma};
-		}
-		elsif ($features{$pragma}) {
-			feature->unimport($pragma);
-		}
-		elsif (not $grandfathered{$pragma}) {
-			carp "Can't disable unknown feature $pragma, ignoring";
-		}
+		_disable($pragma);
 	}
 	return;
 }
@@ -59,13 +82,15 @@ __END__
 
 =pod
 
+=encoding UTF-8
+
 =head1 NAME
 
 experimental - Experimental features made easy
 
 =head1 VERSION
 
-version 0.005
+version 0.006
 
 =head1 DESCRIPTION
 
@@ -73,7 +98,7 @@ This pragma provides an easy and convenient way to enable or disable experimenta
 
 =head2 Disclaimer
 
-Because of the nature of the features it enables, forward compatability can not be guaranteed in any way.
+Because of the nature of the features it enables, forward compatibility can not be guaranteed in any way.
 
 =head2 Use cases
 
