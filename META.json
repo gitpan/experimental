@@ -16,7 +16,7 @@
    "prereqs" : {
       "configure" : {
          "requires" : {
-            "Module::Build::Tiny" : "0.030"
+            "Module::Build::Tiny" : "0.034"
          }
       },
       "develop" : {
@@ -47,7 +47,7 @@
    "provides" : {
       "experimental" : {
          "file" : "lib/experimental.pm",
-         "version" : "0.006"
+         "version" : "0.007"
       }
    },
    "release_status" : "stable",
@@ -62,6 +62,6 @@
          "web" : "https://github.com/Leont/experimental"
       }
    },
-   "version" : "0.006"
+   "version" : "0.007"
 }
 
