@@ -4,7 +4,7 @@
       "Leon Timmermans <leont@cpan.org>"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Dist::Zilla version 5.011, CPAN::Meta::Converter version 2.132830",
+   "generated_by" : "Dist::Zilla version 5.019, CPAN::Meta::Converter version 2.140640",
    "license" : [
       "perl_5"
    ],
@@ -16,7 +16,7 @@
    "prereqs" : {
       "configure" : {
          "requires" : {
-            "Module::Build::Tiny" : "0.034"
+            "Module::Build::Tiny" : "0.036"
          }
       },
       "develop" : {
@@ -32,6 +32,7 @@
             "feature" : "0",
             "perl" : "5.010",
             "strict" : "0",
+            "version" : "0",
             "warnings" : "0"
          }
       },
@@ -40,14 +41,15 @@
             "File::Spec" : "0",
             "IO::Handle" : "0",
             "IPC::Open3" : "0",
-            "Test::More" : "0.89"
+            "Test::More" : "0.89",
+            "perl" : "5.010"
          }
       }
    },
    "provides" : {
       "experimental" : {
          "file" : "lib/experimental.pm",
-         "version" : "0.007"
+         "version" : "0.008"
       }
    },
    "release_status" : "stable",
@@ -62,6 +64,6 @@
          "web" : "https://github.com/Leont/experimental"
       }
    },
-   "version" : "0.007"
+   "version" : "0.008"
 }
 
