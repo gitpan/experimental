@@ -1,5 +1,5 @@
 package experimental;
-$experimental::VERSION = '0.009';
+$experimental::VERSION = '0.010';
 use strict;
 use warnings;
 use version ();
@@ -112,7 +112,7 @@ experimental - Experimental features made easy
 
 =head1 VERSION
 
-version 0.009
+version 0.010
 
 =head1 SYNOPSIS
 
